@@ -68,3 +68,81 @@ class Nnet:
         # Get the highest value from the array and return this
         return np.max(outputs)
 
+    def modify_weight(self):
+        """ Function to modify weights of the bird
+        """
+
+        # Modify the weights from the input to the hidden layer
+        Nnet.modify_array(self.weight_input_hidden)
+
+        # Modify the weights from the hidden to the output layer
+        Nnet.modify_array(self.weight_hidden_output)
+
+    def create_mixed_weights(self, net1, net2):
+        """ Function to mix weights of two birds
+
+        :param net1: class, containing neural network information
+        :param net2: class, containing neural network information
+        """
+
+        # Mix the weights from the input to the hidden layer
+        self.weight_input_hidden = Nnet.get_mix_from_arrays(net1.weight_input_hidden, net2.weight_input_hidden)
+
+        # Mix the weights from the hidden to the output layer
+        self.weight_hidden_output = Nnet.get_mix_from_arrays(net1.weight_hidden_output, net2.weight_hidden_output)
+
+    def modify_array(a):
+        """ Function to modify a weight array
+
+        :param a: numpy array, containing floats representing weights
+        """
+
+        # Use a multi-dimensional iterator to read all values in the array
+        for x in np.nditer(a, op_flags=['readwrite']):
+
+            # Generate a random float number and check if this is lower than the set modification chance
+            if random.random() < MUTATION_WEIGHT_MODIFY_CHANCE:
+                # Change the weight with a random float numbers from [-5, 0)
+                x[...] = np.random.random_sample() - 0.5
+
+    def get_mix_from_arrays(ar1, ar2):
+        """
+
+        :param ar1: numpy array, 2-dimensional containing floats numbers representing weights
+        :param ar2: numpy array, 2-dimensional containing floats numbers representing weights
+        :return:
+           res: numpy array, 2-dimensional containing floats numbers representing weights
+        """
+
+        # Get the total number of weights
+        total_entries = ar1.size
+        # Get the number of row weights
+        num_rows = ar1.shape[0]
+        # Get the number of column weights
+        num_cols = ar1.shape[1]
+
+        # Define how many weights should be modified
+        num_to_take = total_entries - (int(total_entries * MUTATION_ARRAY_MIX_PERC))
+        # Set the index numbers of the weights to modify
+        idx = np.random.choice(np.arange(total_entries), num_to_take, replace=False)
+
+        # Fill a new array with random weight values
+        res = np.random.rand(num_rows, num_cols)
+
+        # For every weight
+        for row in range(0, num_rows):
+            for col in range(0, num_cols):
+                # Get the index position of the specific weight
+                index = row * num_cols + col
+
+                # Check if the weight should be changed by checking the index
+                if index in idx:
+                    # Get the weight of the first parent when the weight should be changed
+                    res[row][col] = ar1[row][col]
+                # Else get the weight of the second parent
+                else:
+                    res[row][col] = ar2[row][col]
+
+        # Return the array having weights of the child bird
+        return res
+

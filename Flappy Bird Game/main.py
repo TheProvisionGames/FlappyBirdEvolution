@@ -81,14 +81,14 @@ def run_game():  # This plays when you start up main.py
 
         # Check if there are any birds left
         if num_alive == 0:
-            # Create a new set of pipes when there is not any bird left
+            # Create a new set of pipes
             pipes.create_new_set()
 
             # Restart the game time
             game_time = 0
 
-            # Create a new set of birds
-            birds.create_new_generation()
+            # Create a new set of bird population
+            birds.evolve_population()
 
             # Update the number of iterated games
             num_iterations += 1
