@@ -120,14 +120,9 @@ def run_game():
             if event.type == pygame.QUIT:
                 running = False
 
-            # Stop running the game when a key (with exception of the spcae bar) is pressed
+            # Stop running the game when a key is pressed
             elif event.type == pygame.KEYDOWN:
-                # Flap the bird when the key is the space bar
-                if event.key == pygame.K_SPACE:
-                    bird.jump()
-                # Every other key will close the game
-                else:
-                    running = False
+                running = False
 
         # Update the drawn pipe
         pipes.update(dt)
