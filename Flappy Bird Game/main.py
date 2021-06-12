@@ -128,7 +128,7 @@ def run_game():
         pipes.update(dt)
 
         # Get the number of living birds
-        num_alive = birds.update(dt, pipes.pipes)
+        num_alive = bird.update(dt, pipes.pipes)
 
         # Check if there are any birds left
         if num_alive == 0:
@@ -139,7 +139,7 @@ def run_game():
             game_time = 0
 
             # Create a new set of bird population
-            birds.evolve_population()
+            bird.evolve_population()
 
             # Update the number of iterated games
             num_iterations += 1
