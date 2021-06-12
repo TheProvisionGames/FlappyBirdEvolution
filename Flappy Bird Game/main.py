@@ -4,7 +4,7 @@ import pygame
 # Import classes and properties of other Flappy Bird files
 from defs import *
 from pipe import PipeCollection
-from bird import Bird
+from bird import BirdCollection
 
 
 def update_label(data, title, font, x, y, gameDisplay):
@@ -85,7 +85,7 @@ def run_game():
     pipes.create_new_set()
 
     # Initialize the bird class
-    bird = Bird(gameDisplay)
+    birds = BirdCollection(gameDisplay)
 
     # Set a chosen font and size
     label_font = pygame.font.SysFont("monospace", DATA_FONT_SIZE)
@@ -128,7 +128,7 @@ def run_game():
         pipes.update(dt)
 
         # Get the number of living birds
-        num_alive = bird.update(dt, pipes.pipes)
+        num_alive = birds.update(dt, pipes.pipes)
 
         # Check if there are any birds left
         if num_alive == 0:
@@ -139,7 +139,7 @@ def run_game():
             game_time = 0
 
             # Create a new set of bird population
-            bird.evolve_population()
+            birds.evolve_population()
 
             # Update the number of iterated games
             num_iterations += 1
