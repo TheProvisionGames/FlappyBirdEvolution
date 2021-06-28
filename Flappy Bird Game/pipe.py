@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import pygame
 import random
 from defs import *  # import properties from defs.py
@@ -44,7 +42,7 @@ class Pipe:
         """ Function to get the initially position of the pipe
 
         :param x: integer, x-position of the pipe
-        :param y: integer, y-positiion of the pipe
+        :param y: integer, y-position of the pipe
         """
 
         # Set the x-position of the pipe to the left of the image
@@ -159,16 +157,16 @@ class PipeCollection:
         rightmost = 0
 
         # For every pipe in the list
-        for p in self.pipes:
+        for pipe in self.pipes:
             # Update the drawn position of the pipe
-            p.update(dt)
+            pipe.update(dt)
 
             # Only check upper pipes
-            if p.pipe_type == PIPE_UPPER:
+            if pipe.pipe_type == PIPE_UPPER:
                 # Look for the most right pipe
-                if p.rect.left > rightmost:
+                if pipe.rect.left > rightmost:
                     # The position of the pipe is the left side of the image
-                    rightmost = p.rect.left
+                    rightmost = pipe.rect.left
 
         # If the most right pair of pipes had enough room to its right
         if rightmost < (DISPLAY_W - PIPE_ADD_GAP):
@@ -176,4 +174,4 @@ class PipeCollection:
             self.add_new_pipe_pair(DISPLAY_W)
 
         # Remove pipe pairs from the list that are not moving
-        self.pipes = [p for p in self.pipes if p.state == PIPE_MOVING]
+        self.pipes = [pipe for pipe in self.pipes if pipe.state == PIPE_MOVING]
