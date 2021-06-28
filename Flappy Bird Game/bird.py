@@ -33,7 +33,7 @@ class Bird:
         # Set the start living time at 0 (This is for the AI to see if it works well)
         self.time_lived = 0
 
-        # Set the startpositiom of the bird
+        # Set the start position of the bird
         self.set_position(BIRD_START_X, BIRD_START_Y)
 
         # Initialize the neural network class with the given parameters
@@ -48,6 +48,7 @@ class Bird:
         :param x: integer, x-position of the bird
         :param y: integer, y-positiion of the bird
         """
+        
         self.rect.centerx = x
         self.rect.centery = y
 
@@ -126,9 +127,9 @@ class Bird:
         """
 
         # For every pipe in the list
-        for p in pipes:
+        for pipe in pipes:
             # When the bird collides with a pipe
-            if p.rect.colliderect(self.rect):
+            if pipe.rect.colliderect(self.rect):
                 # Set the bird status as dead and stop the loop
                 self.state = BIRD_DEAD
                 break
@@ -168,18 +169,18 @@ class Bird:
         bottom_y = 0
 
         # Check which pipe (upper or lower) is the closest
-        for p in pipes:
+        for pipe in pipes:
             # If the pipe is an upper pipe, and closer then the closest pipe stored, and at the right side of the pipe image
-            if p.pipe_type == PIPE_UPPER and p.rect.right < closest and p.rect.right > self.rect.left:
+            if pipe.pipe_type == PIPE_UPPER and pipe.rect.right < closest and pipe.rect.right > self.rect.left:
                 # Update the closest pipe position
-                closest = p.rect.right
-                bottom_y = p.rect.bottom
+                closest = pipe.rect.right
+                bottom_y = pipe.rect.bottom
 
         # Get the horizontal distance of the bird to the pipe
         horizontal_distance = closest - self.rect.centerx
 
         # Get the vertical distance of the bird to the pipe
-        vertical_distance = (self.rect.centery) - (bottom_y + PIPE_GAP_SIZE / 2)
+        vertical_distance = self.rect.centery - (bottom_y + PIPE_GAP_SIZE / 2)
 
         # Define the input values
         inputs = [
@@ -265,11 +266,11 @@ class BirdCollection:
         num_alive = 0
 
         # Check every bird in the bird list
-        for b in self.birds:
+        for bird in self.birds:
             # Update the position of the bird by adding the movement and pipe information
-            b.update(dt, pipes)
+            bird.update(dt, pipes)
             # Check if the bird is living
-            if b.state == BIRD_ALIVE:
+            if bird.state == BIRD_ALIVE:
                 # Count the living birds
                 num_alive += 1
 
@@ -281,9 +282,9 @@ class BirdCollection:
         """
 
         # For every bird in the list
-        for b in self.birds:
+        for bird in self.birds:
             # Update the bird fitness determined by living time and the distance to the gap of the pipes
-            b.fitness += b.time_lived * PIPE_SPEED
+            bird.fitness += bird.time_lived * PIPE_SPEED
 
         # Sort the birds by their fitness
         self.birds.sort(key=lambda x: x.fitness, reverse=True)
@@ -301,9 +302,9 @@ class BirdCollection:
         num_bad_to_take = int(len(self.birds) * MUTATION_BAD_TO_KEEP)
 
         # For every bad bird
-        for b in bad_birds:
+        for bird in bad_birds:
             # Modify the neural network weights
-            b.nnet.modify_weight()
+            bird.nnet.modify_weight()
 
         # Create a list of new birds that are needed for every deleted bad bird
         new_birds = []
@@ -339,10 +340,8 @@ class BirdCollection:
                 new_birds.append(new_bird)
 
         # Reset the birds for every bird in the new list
-        for b in new_birds:
-            b.reset();
+        for bird in new_birds:
+            bird.reset()
 
         # Update the bird list
         self.birds = new_birds
-
-
